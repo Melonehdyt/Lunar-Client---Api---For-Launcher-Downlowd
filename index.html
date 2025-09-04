@@ -24,9 +24,15 @@
   <script>
     async function loadLatestVersion() {
       try {
-        const res = await fetch('https://launcherupdates.lunarclientcdn.com/launcher/launcher-meta.json');
+        // Use free CORS proxy
+        const proxyUrl = 'https://api.allorigins.win/get?url=';
+        const targetUrl = encodeURIComponent('https://launcherupdates.lunarclientcdn.com/launcher/launcher-meta.json');
+        const res = await fetch(proxyUrl + targetUrl);
+
         if (!res.ok) throw new Error('Failed to fetch version info');
-        const data = await res.json();
+        const dataWrapped = await res.json();
+        const data = JSON.parse(dataWrapped.contents);
+
         const version = data.version;
 
         document.getElementById('version').innerText = `Latest Version: v${version}`;
@@ -44,3 +50,4 @@
 
 </body>
 </html>
+
